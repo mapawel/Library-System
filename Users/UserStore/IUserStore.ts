@@ -1,7 +1,7 @@
 import { User } from '../User';
-import { UserStoreItem } from './UserStoreItemType';
+import { UserProps } from '../UserPropsType';
 
 export interface IUserStore {
-  addUser(user: User): UserStoreItem | void;
-  getUserByPesel(pesel: number): UserStoreItem | undefined;
+  addUser({ pesel, firstName, lastName }: UserProps): User | void;
+  getUserByPesel(pesel: number): User | undefined;
 }

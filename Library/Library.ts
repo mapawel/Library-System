@@ -39,7 +39,7 @@ export class Library implements ILibrary {
     return Library.books.get(uuid);
   }
 
-  public getBooks(): Map<string, LibraryItem> {
-    return new Map(Library.books);
-  }
+  // public getBooks(): Map<string, LibraryItem> {
+  //   return new Map(Library.books);
+  // }
 }

@@ -1,7 +1,7 @@
-import { Book } from "Book/Book"
-import { UserStoreItem } from "../Users/UserStore/UserStoreItemType";
+import { Book } from 'Book/Book';
+import { User } from '../Users/User';
 
 export type LibraryItem = {
   book: Book;
-  user: UserStoreItem | null
-}
+  user: User | null;
+};

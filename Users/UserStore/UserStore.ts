@@ -1,11 +1,11 @@
-import { UserStoreItem } from './UserStoreItemType';
 import { User } from '../User';
 import { IUserStore } from './IUserStore';
-// TODO jak zrobić, aby nie było konieczności tworzenia obiektu a potem walidacji go z bazą, czy np. pesel występuje a jeśli tak to obiekt niepotrzebnie zajmuje pamięć... Moja propozycja, aby nie była z zewnątrz używana klasa User a tworzenie usera odbywało się tu w storze, gdzie najpierw nastąpi walidacja, czy user w storze występuje... Dodatkowo jeśli User stworzony jest dzięki storowi, to zapisywany jest w mapie jako z dodatkowym polem "active", które potem w innych modułach może być sprawdzane i świadczy o tym, że user został prawidłowo stworzony. ???
+import { UserProps } from '../UserPropsType';
+// TODO jak zapewnić wyłącznie tej klasie możliwość tworzenia instancji User?? Chcę to zrobić, bo od razu jest walidacja czy nie ma dubli oraz user zapisywany jest w storze. Gdy ktoś stworzy tylko obiekt User klasą User to zajmuje to niepotrzebnie pamięć a chcąc potem wykorzystać takiego usera nie da się, bo nie występuje w storze.
 
 export class UserStore implements IUserStore {
   private static instance: UserStore | null = null;
-  private static users: Map<number, UserStoreItem> = new Map();
+  private static users: Map<number, User> = new Map();
 
   private constructor() {}
 
@@ -14,16 +14,17 @@ export class UserStore implements IUserStore {
     return (UserStore.instance = new UserStore());
   }
 
-  public addUser(user: User): UserStoreItem | void {
-    if (this.getUserByPesel(user.pesel))
+  public addUser({ pesel, firstName, lastName }: UserProps): User | void {
+    if (this.getUserByPesel(pesel))
       throw new Error(
         'There is a user with this pesel in our base! User not added!'
       );
-    UserStore.users.set(user.pesel, { user, active: true });
-    return { user, active: true };
+    const newUser = new User({ pesel, firstName, lastName });
+    UserStore.users.set(pesel, newUser);
+    return newUser;
   }
 
-  public getUserByPesel(pesel: number): UserStoreItem | undefined {
+  public getUserByPesel(pesel: number): User | undefined {
     return UserStore.users.get(pesel);
   }
 }
