@@ -1,5 +1,4 @@
 import { UserProps } from './UserPropsType';
-import { Booking } from '../Booking/Booking';
 //TODO jak zrobić, aby klasa User nie była używana z zewnątrz, najlepiej aby nie było dostępu do możliwości tworzenia jej instancji tutaj a wyłącznie w klasie obejmującej UserStore ??
 
 export class User {
@@ -13,5 +12,9 @@ export class User {
     this.pesel = pesel;
     this.firstName = firstName;
     this.lastName = lastName;
+  }
+
+  checkIfCanBook(): boolean {
+    return this.canBook;
   }
 }

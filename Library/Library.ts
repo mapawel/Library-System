@@ -1,6 +1,7 @@
 import { Book } from 'Book/Book';
 import { ILibrary } from './ILibrary';
 import { LibraryItem } from './LibraryItemType';
+import { User } from '../Users/User';
 // TODO czy praktyruje się zapisywanie stanu w 2 miejscach, czyli w systemie wypożyczeć, że dany użytkownik pożyczył daną książkę ORAZ podpięcie tegoż użytkownika do książki równoczęsnie. Cel -> ułatwienie wyszukiwania wolnych książek czy od razu sprawdzenie, że dana wyszukana książka jest zajęta. Inaczej chcąc sprawdzić czy dana książka jest wypożyczona trzebaby w systemie wypożyczeń sprawdzić czy występuje w powiązaniach książka - użytkownik a biorąc pod uwagę, że każdy użytkowni może mieć wiele książek to query byłoby obciążające...
 
 export class Library implements ILibrary {
@@ -23,6 +24,15 @@ export class Library implements ILibrary {
     return { book, user: null };
   }
 
+  public connectBookWhUser(bookUuid: string, user: User | null) {
+    const libraryItem: LibraryItem | undefined = Library.books.get(bookUuid);
+    if (!libraryItem)
+      throw new Error(
+        'Library item not found! Cannon connect the user to the book.'
+      );
+    Library.books.set(bookUuid, { ...libraryItem, user });
+  }
+
   public removeBookById(uuid: string): LibraryItem | void {
     const bookToRm = this.getItemById(uuid);
     if (!bookToRm)
@@ -39,7 +49,7 @@ export class Library implements ILibrary {
     return Library.books.get(uuid);
   }
 
-  // public getBooks(): Map<string, LibraryItem> {
-  //   return new Map(Library.books);
-  // }
+  public getBooks(): Map<string, LibraryItem> {
+    return new Map(Library.books);
+  }
 }

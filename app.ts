@@ -19,21 +19,42 @@ const b2 = new Book({
   publisher: 'wydawca2',
 });
 
-const library = Library.getLibrary()
-const r1 = library.addBook(b1)
-const r2 = library.addBook(b2)
-// console.log('r1 ----> ', r1);
-// console.log('r2 ----> ', r2);
-// console.log('library.books ----> ', library.getBooks());
+const library = Library.getLibrary();
+const r1 = library.addBook(b1);
+const r2 = library.addBook(b2);
+const book1uuid = r1?.book.uuid;
+const book2uuid = r2?.book.uuid;
 
+const users = UserStore.getInstance();
+const ru1 = users.addUser({ pesel: 123, firstName: 'Pawel', lastName: 'Em' });
+const ru2 = users.addUser({ pesel: 456, firstName: 'Piotr', lastName: 'Em' });
+const user1pesel = ru1?.pesel;
+const user2pesel = ru2?.pesel;
 
-// const u1 = new User({pesel: 123, firstName: 'Pawel', lastName: 'Em'})
-// const u2 = new User({pesel: 456, firstName: 'Piotr', lastName: 'Em'})
+const system = BookingSystem.getBookingSystem();
+system.bookBook({
+  bookUuid: book1uuid as string,
+  userPesel: user1pesel as number,
+  bookingDays: 14,
+});
+system.bookBook({
+  bookUuid: book2uuid as string,
+  userPesel: user1pesel as number,
+  bookingDays: 14,
+});
+// system.bookBook({
+//   bookUuid: book2uuid as string,
+//   userPesel: user2pesel as number,
+//   bookingDays: 21,
+// });
 
-// const users = UserStore.getInstance()
-// const ru1 = users.addUser(u1)
-// const ru2 = users.addUser(u2)
-// console.log('ru1 ----> ', ru1);
-// console.log('ru2 ----> ', ru2);
+console.log('bookings ----> ', system.getBookings());
+console.log('library ----> ', library.getBooks());
 
-const system = BookingSystem.getBookingSystem()
+system.returnBook({
+  bookUuid: book1uuid as string,
+  userPesel: user1pesel as number,
+});
+
+console.log('bookings ----> ', system.getBookings());
+console.log('library ----> ', library.getBooks());
