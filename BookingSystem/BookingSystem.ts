@@ -42,6 +42,11 @@ export class BookingSystem {
       throw new Error(
         'Passed book uuid points on the alread booked book! Cannot proceed.'
       );
+    const possiblyCurrentPenalty = this.checkCurrentPenalty(user.pesel);
+    if (possiblyCurrentPenalty >= 10)
+      throw new Error(
+        'User is holding books too long and cannot book another one! User should return all books and weit for reset petalty.'
+      );
   }
 
   private validateToReturn(
@@ -82,6 +87,8 @@ export class BookingSystem {
     const libraryItem: LibraryItem | undefined =
       BookingSystem.library.getItemById(bookUuid);
     this.validateIfExist(user, libraryItem);
+
+    user?.refreshPenalty();
     this.validateToBook(user, libraryItem);
 
     const newBooking = new Booking(libraryItem?.book as Book, bookingDays);
@@ -113,7 +120,13 @@ export class BookingSystem {
 
     this.validateToReturn(user, libraryItem, bookingsArr);
 
-    // return
+    const penalty = this.calculateBookingPenalty(
+      bookingsArr?.find(
+        (bookingToFind: Booking) => bookingToFind.book.uuid === bookUuid
+      ) as Booking
+    );
+    user?.setPenalty(penalty);
+
     BookingSystem.library.connectBookWhUser(bookUuid, null);
     if (bookingsArr)
       BookingSystem.bookings.set(
@@ -123,6 +136,29 @@ export class BookingSystem {
         )
       );
     return true;
+  }
+
+  private checkCurrentPenalty(userPesel: number): number {
+    const currentBookings: Booking[] | undefined =
+      BookingSystem.bookings.get(userPesel);
+    const now = Date.now();
+    return (
+      currentBookings?.reduce(
+        (acc: number, booking: Booking) =>
+          acc +
+          (now - booking.endDate.getTime() > 0
+            ? Math.ceil((now - booking.endDate.getTime()) / 1000 / 3600 / 24)
+            : 0),
+        0
+      ) || 0
+    );
+  }
+
+  private calculateBookingPenalty(booking: Booking): number {
+    const now = Date.now();
+    return now - booking.endDate.getTime() > 0
+      ? Math.ceil((now - booking.endDate.getTime()) / 1000 / 3600 / 24)
+      : 0;
   }
 
   public getBookings() {

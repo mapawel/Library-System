@@ -32,29 +32,41 @@ const user1pesel = ru1?.pesel;
 const user2pesel = ru2?.pesel;
 
 const system = BookingSystem.getBookingSystem();
+
 system.bookBook({
   bookUuid: book1uuid as string,
   userPesel: user1pesel as number,
-  bookingDays: 14,
+  bookingDays: 6,
 });
+
+
+
 system.bookBook({
   bookUuid: book2uuid as string,
   userPesel: user1pesel as number,
-  bookingDays: 14,
+  bookingDays: 5,
 });
-// system.bookBook({
-//   bookUuid: book2uuid as string,
-//   userPesel: user2pesel as number,
-//   bookingDays: 21,
-// });
 
-console.log('bookings ----> ', system.getBookings());
-console.log('library ----> ', library.getBooks());
 
 system.returnBook({
   bookUuid: book1uuid as string,
   userPesel: user1pesel as number,
 });
 
+system.returnBook({
+  bookUuid: book2uuid as string,
+  userPesel: user1pesel as number,
+});
+
+system.bookBook({
+  bookUuid: book2uuid as string,
+  userPesel: user1pesel as number,
+  bookingDays: 5,
+});
+
+
 console.log('bookings ----> ', system.getBookings());
 console.log('library ----> ', library.getBooks());
+
+// console.log('petalty ----> ', system.calculatePenalty(123));
+console.log(' ----> ', users.getUserByPesel(123));
