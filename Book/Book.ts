@@ -9,6 +9,7 @@ export class Book {
   private publisher: string;
 
   constructor({ title, author, year, publisher }: BookProps) {
+    // VALIDATORS WILL BE ADD HERE TO VALIDATE TITLE, AUTHOR, YEAR, PUBLISHER!
     this.uuid = uuidv4();
     this.title = title;
     this.author = author;

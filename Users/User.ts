@@ -21,6 +21,7 @@ export class User {
   }
 
   setPenalty(penalty: number) {
+    // VALIDATOR WILL BE ADD HERE
     this.penalty += penalty;
     if (this.penalty >= 10) {
       this.canBook = false;

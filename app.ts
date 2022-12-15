@@ -5,6 +5,7 @@ import { User } from './Users/User.js';
 import { BookingSystem } from './BookingSystem/BookingSystem.js';
 // TODO jak zmienić importy aby skorzystać ze ścieżki bazowej i bez .js?
 
+// adding some test books
 const b1 = new Book({
   title: 'tytuł',
   author: 'autor',
@@ -19,34 +20,35 @@ const b2 = new Book({
   publisher: 'wydawca2',
 });
 
+// initializing library and adding books to library
 const library = Library.getLibrary();
 const r1 = library.addBook(b1);
 const r2 = library.addBook(b2);
 const book1uuid = r1?.book.uuid;
 const book2uuid = r2?.book.uuid;
 
+// initializing users store and adding some test users
 const users = UserStore.getInstance();
 const ru1 = users.addUser({ pesel: 123, firstName: 'Pawel', lastName: 'Em' });
 const ru2 = users.addUser({ pesel: 456, firstName: 'Piotr', lastName: 'Em' });
 const user1pesel = ru1?.pesel;
-const user2pesel = ru2?.pesel;
 
+//initializing BOOKING SYSTEM
 const system = BookingSystem.getBookingSystem();
 
+
+// SOME TEST OPERATIONS ON BOOKINGS
 system.bookBook({
   bookUuid: book1uuid as string,
   userPesel: user1pesel as number,
   bookingDays: 6,
 });
 
-
-
 system.bookBook({
   bookUuid: book2uuid as string,
   userPesel: user1pesel as number,
   bookingDays: 5,
 });
-
 
 system.returnBook({
   bookUuid: book1uuid as string,
@@ -65,8 +67,5 @@ system.bookBook({
 });
 
 
-console.log('bookings ----> ', system.getBookings());
-console.log('library ----> ', library.getBooks());
-
-// console.log('petalty ----> ', system.calculatePenalty(123));
-console.log(' ----> ', users.getUserByPesel(123));
+console.log('ALL BOOKINGS IN SYSTEM ----> ', system.getBookings());
+console.log('USER WITH BOOKS ----> ', users.getUserByPesel(123));

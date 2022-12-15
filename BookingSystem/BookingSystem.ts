@@ -4,6 +4,7 @@ import { UserStore } from '../Users/UserStore/UserStore';
 import { LibraryItem } from '../Library/LibraryItemType';
 import { User } from '../Users/User';
 import { Book } from 'Book/Book';
+import { BookingSystemError } from './BookingSystemError';
 
 export class BookingSystem {
   private static instance: BookingSystem;
@@ -25,9 +26,16 @@ export class BookingSystem {
     user: User | undefined,
     libraryItem: LibraryItem | undefined
   ): void {
-    if (!user) throw new Error('Passed user pesel not found! Cannon proceed.');
+    if (!user)
+      throw new BookingSystemError(
+        'Passed user pesel not found! Cannon proceed.',
+        500
+      );
     if (!libraryItem)
-      throw new Error('Passed book uuid not found! Cannon proceed.');
+      throw new BookingSystemError(
+        'Passed book uuid not found! Cannon proceed.',
+        500
+      );
   }
 
   private validateToBook(
@@ -35,17 +43,20 @@ export class BookingSystem {
     libraryItem: LibraryItem | undefined
   ): void {
     if (!user?.checkIfCanBook())
-      throw new Error(
-        'Passed user cannot book a book, is blocked! Cannon proceed.'
+      throw new BookingSystemError(
+        'Passed user cannot book a book, is blocked! Cannon proceed.',
+        500
       );
     if (libraryItem?.user)
-      throw new Error(
-        'Passed book uuid points on the alread booked book! Cannot proceed.'
+      throw new BookingSystemError(
+        'Passed book uuid points on the alread booked book! Cannot proceed.',
+        500
       );
     const possiblyCurrentPenalty = this.checkCurrentPenalty(user.pesel);
     if (possiblyCurrentPenalty >= 10)
-      throw new Error(
-        'User is holding books too long and cannot book another one! User should return all books and weit for reset petalty.'
+      throw new BookingSystemError(
+        'User is holding books too long and cannot book another one! User should return all books and weit for reset petalty.',
+        500
       );
   }
 
@@ -55,12 +66,14 @@ export class BookingSystem {
     bookingsArr: Booking[] | undefined
   ): void {
     if (libraryItem?.user?.pesel !== user?.pesel)
-      throw new Error(
-        'Passed book is connected with other user! Cannot proceed the returnement by passed user.'
+      throw new BookingSystemError(
+        'Passed book is connected with other user! Cannot proceed the returnement by passed user.',
+        500
       );
     if (!bookingsArr || !bookingsArr?.length)
-      throw new Error(
-        "Passed user doesn't have any book to return! Cannot proceed."
+      throw new BookingSystemError(
+        "Passed user doesn't have any book to return! Cannot proceed.",
+        500
       );
     if (
       bookingsArr.findIndex(
@@ -68,8 +81,9 @@ export class BookingSystem {
           currentBooking.book.uuid === libraryItem?.book.uuid
       ) < 0
     )
-      throw new Error(
-        "Passed user doesn't have this book to return! Cannot proceed."
+      throw new BookingSystemError(
+        "Passed user doesn't have this book to return! Cannot proceed.",
+        500
       );
   }
 
