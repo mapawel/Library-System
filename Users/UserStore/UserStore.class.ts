@@ -2,12 +2,10 @@ import { User } from '../User.class';
 import { IUserStore } from './UserStore.interface';
 import { UserParams } from '../UserParams.type';
 import { UserStoreError } from './UserStore.exception';
-// TODO jak zapewnić wyłącznie tej klasie możliwość tworzenia instancji User?? Chcę to zrobić, bo od razu jest walidacja czy nie ma dubli oraz user zapisywany jest w storze. Gdy ktoś stworzy tylko obiekt User klasą User to zajmuje to niepotrzebnie pamięć a chcąc potem wykorzystać takiego usera nie da się, bo nie występuje w storze.
-// TODO czy można używać kodów błędów ze standardu HTTP? Raczej swoje własne?
 
 export class UserStore implements IUserStore {
   private static instance: UserStore | null = null;
-  private static users: Map<number, User> = new Map();
+  private readonly users: Map<number, User> = new Map();
 
   private constructor() {}
 
@@ -20,15 +18,14 @@ export class UserStore implements IUserStore {
     // VALIDATORS WILL BE ADD HERE TO VALIDATE pesel, firstName, lastName !
     if (this.getUserByPesel(pesel))
       throw new UserStoreError(
-        'There is a user with this pesel in our base! User not added again!',
-        500
+        'There is a user with this pesel in our base! User not added again!'
       );
     const newUser = new User({ pesel, firstName, lastName });
-    UserStore.users.set(pesel, newUser);
+    this.users.set(pesel, newUser);
     return newUser;
   }
 
   public getUserByPesel(pesel: number): User | undefined {
-    return UserStore.users.get(pesel);
+    return this.users.get(pesel);
   }
 }

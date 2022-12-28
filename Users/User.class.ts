@@ -1,11 +1,9 @@
 import { UserParams } from './UserParams.type';
-//TODO jak zrobić, aby klasa User nie była używana z zewnątrz, najlepiej aby nie było dostępu do możliwości tworzenia jej instancji tutaj a wyłącznie w klasie obejmującej UserStore ??
-// Jak zrobić aby nie można było korzystać mając odwołanie do instancji user z metod np. setPenalty a móc je tylko wykorzystać w konkretnej klasie, np. BookingSystem?
 
 export class User {
   readonly pesel: number;
-  private firstName: string;
-  private lastName: string;
+  private readonly firstName: string;
+  private readonly lastName: string;
   private canBook: boolean = true;
   private penalty: number = 0;
   private panaltyResetTime: Date | null = null;

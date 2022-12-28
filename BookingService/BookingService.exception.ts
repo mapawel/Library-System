@@ -1,10 +1,7 @@
-
 //booking-service.exception.ts
 
 export class BookingServiceError extends Error {
-  readonly name: string = 'Booking System Error!';
-  constructor(readonly message: string, readonly code: number) {
+  constructor(readonly message: string) {
     super(message);
-    Object.setPrototypeOf(this, BookingServiceError.prototype);
   }
 }

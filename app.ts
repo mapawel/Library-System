@@ -21,7 +21,7 @@ const b2 = new Book({
 });
 
 // initializing library and adding books to library
-const library = Library.getLibrary();
+const library = Library.getInstance();
 const r1 = library.addBook(b1);
 const r2 = library.addBook(b2);
 const book1uuid = r1?.book.uuid;
@@ -34,7 +34,7 @@ const ru2 = users.addUser({ pesel: 456, firstName: 'Piotr', lastName: 'Em' });
 const user1pesel = ru1?.pesel;
 
 //initializing BOOKING SYSTEM
-const system = BookingService.getBookingService();
+const system = BookingService.getInstance();
 
 // SOME TEST OPERATIONS ON BOOKINGS
 system.bookBook({
