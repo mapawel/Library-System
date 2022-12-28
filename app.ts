@@ -1,8 +1,8 @@
 import { Library } from './Library/Library.class.js';
 import { Book } from './Book/Book.class.js';
-import { UserStore } from './Users/UserStore/UserStore.class.js';
+import { UserStore } from './Users/User-store/User-store.class.js';
 import { User } from './Users/User.class.js';
-import { BookingService } from './BookingService/BookingService.class.js';
+import { BookingService } from './Booking-service/Booking-service.class.js';
 // TODO jak zmienić importy aby skorzystać ze ścieżki bazowej i bez .js?
 
 // adding some test books

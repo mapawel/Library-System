@@ -15,10 +15,11 @@ export class Library implements ILibrary {
     return (Library.instance = new Library());
   }
 
-  public addBook(book: Book): LibraryItem | void {
-    if (this.getItemById(book.uuid))
+  public addBook(book: Book): LibraryItem {
+    if (this.books.get(book.uuid))
       throw new LibraryError(
-        "This book uuid has already been in our system. Couldn't add it again!"
+        "This book uuid has already been in our system. Couldn't add it again!",
+        { book }
       );
     this.books.set(book.uuid, { book, user: null });
     return { book, user: null };
@@ -27,28 +28,35 @@ export class Library implements ILibrary {
   public connectBookWhUser(
     bookUuid: string,
     user: User | null
-  ): boolean | void {
+  ): boolean {
     const libraryItem: LibraryItem | undefined = this.books.get(bookUuid);
     if (!libraryItem)
       throw new LibraryError(
-        'Library item not found! Cannon connect the user to the book.'
+        'Library item not found! Cannon connect the user to the book.',
+        { uuid: bookUuid, user }
       );
     this.books.set(bookUuid, { ...libraryItem, user });
+    return true
   }
 
-  public getItemById(uuid: string): LibraryItem | undefined {
-    return this.books.get(uuid);
+  public getItemById(uuid: string): LibraryItem {
+    const foundItem = this.books.get(uuid);
+    if (!foundItem)
+      throw new LibraryError('Passed book uuid not found.', { uuid });
+    return foundItem;
   }
 
-  public removeBookById(uuid: string): LibraryItem | void {
+  public removeBookById(uuid: string): LibraryItem {
     const bookToRm = this.getItemById(uuid);
     if (!bookToRm)
       throw new LibraryError(
-        "Passed book uuid not found. Couldn't remove the book!"
+        "Passed book uuid not found. Couldn't remove the book!",
+        { uuid }
       );
     if (bookToRm.user)
       throw new LibraryError(
-        'This book has already been booked. Removing possible after returnement.'
+        'This book has already been booked. Removing possible after returnement.',
+        { uuid }
       );
     this.books.delete(uuid);
     return bookToRm;

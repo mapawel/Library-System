@@ -1,4 +1,5 @@
-import { UserParams } from './UserParams.type';
+import { UserParams } from './User-params.type';
+import { daysToMillis } from '../utils/daysToMillis';
 
 export class User {
   readonly pesel: number;
@@ -23,11 +24,11 @@ export class User {
     this.penalty += penalty;
     if (this.penalty >= 10) {
       this.canBook = false;
-      this.panaltyResetTime = new Date(Date.now() + 1000 * 3600 * 24 * 30);
+      this.panaltyResetTime = new Date(Date.now() + daysToMillis(30));
     }
   }
 
-  refreshPenalty() {
+  resetPenaltyIfPossible() {
     if (
       this.panaltyResetTime?.getTime() &&
       Date.now() >= this.panaltyResetTime.getTime()

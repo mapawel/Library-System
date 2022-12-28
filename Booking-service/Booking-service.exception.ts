@@ -1,4 +1,4 @@
-export class UserStoreError extends Error {
+export class BookingServiceError extends Error {
   constructor(readonly message: string) {
     super(message);
   }
