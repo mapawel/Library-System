@@ -1,4 +1,4 @@
-import { UserProps } from './UserPropsType';
+import { UserParams } from './UserParams.type';
 //TODO jak zrobić, aby klasa User nie była używana z zewnątrz, najlepiej aby nie było dostępu do możliwości tworzenia jej instancji tutaj a wyłącznie w klasie obejmującej UserStore ??
 // Jak zrobić aby nie można było korzystać mając odwołanie do instancji user z metod np. setPenalty a móc je tylko wykorzystać w konkretnej klasie, np. BookingSystem?
 
@@ -10,7 +10,7 @@ export class User {
   private penalty: number = 0;
   private panaltyResetTime: Date | null = null;
 
-  constructor({ pesel, firstName, lastName }: UserProps) {
+  constructor({ pesel, firstName, lastName }: UserParams) {
     this.pesel = pesel;
     this.firstName = firstName;
     this.lastName = lastName;

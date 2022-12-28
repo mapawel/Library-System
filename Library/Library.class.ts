@@ -1,8 +1,8 @@
-import { Book } from 'Book/Book';
-import { ILibrary } from './ILibrary';
-import { LibraryItem } from './LibraryItemType';
-import { User } from '../Users/User';
-import { LibraryError } from './LibraryError';
+import { Book } from 'Book/Book.class';
+import { ILibrary } from './Library.interface';
+import { LibraryItem } from './LibraryItem.type';
+import { User } from '../Users/User.class';
+import { LibraryError } from './Library.exception';
 
 // TODO czy praktyruje się zapisywanie informacji w 2 miejscach, czyli w systemie wypożyczeń, że dany użytkownik pożyczył daną książkę ORAZ podpięcie tegoż użytkownika do książki równoczęsnie. Cel -> ułatwienie wyszukiwania wolnych książek czy od razu sprawdzenie, że dana wyszukana książka jest zajęta. Inaczej chcąc sprawdzić czy dana książka jest wypożyczona trzebaby w systemie wypożyczeń sprawdzić czy występuje w powiązaniach książka - użytkownik a biorąc pod uwagę, że każdy użytkowni może mieć wiele książek to query byłoby obciążające...
 

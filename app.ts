@@ -1,8 +1,8 @@
-import { Library } from './Library/Library.js';
-import { Book } from './Book/Book.js';
-import { UserStore } from './Users/UserStore/UserStore.js';
-import { User } from './Users/User.js';
-import { BookingSystem } from './BookingSystem/BookingSystem.js';
+import { Library } from './Library/Library.class.js';
+import { Book } from './Book/Book.class.js';
+import { UserStore } from './Users/UserStore/UserStore.class.js';
+import { User } from './Users/User.class.js';
+import { BookingService } from './BookingService/BookingService.class.js';
 // TODO jak zmienić importy aby skorzystać ze ścieżki bazowej i bez .js?
 
 // adding some test books
@@ -34,8 +34,7 @@ const ru2 = users.addUser({ pesel: 456, firstName: 'Piotr', lastName: 'Em' });
 const user1pesel = ru1?.pesel;
 
 //initializing BOOKING SYSTEM
-const system = BookingSystem.getBookingSystem();
-
+const system = BookingService.getBookingService();
 
 // SOME TEST OPERATIONS ON BOOKINGS
 system.bookBook({
@@ -65,7 +64,6 @@ system.bookBook({
   userPesel: user1pesel as number,
   bookingDays: 5,
 });
-
 
 console.log('ALL BOOKINGS IN SYSTEM ----> ', system.getBookings());
 console.log('USER WITH BOOKS ----> ', users.getUserByPesel(123));

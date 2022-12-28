@@ -1,7 +1,7 @@
-import { User } from '../User';
-import { IUserStore } from './IUserStore';
-import { UserProps } from '../UserPropsType';
-import { UserStoreError } from './UserStoreError';
+import { User } from '../User.class';
+import { IUserStore } from './UserStore.interface';
+import { UserParams } from '../UserParams.type';
+import { UserStoreError } from './UserStore.exception';
 // TODO jak zapewnić wyłącznie tej klasie możliwość tworzenia instancji User?? Chcę to zrobić, bo od razu jest walidacja czy nie ma dubli oraz user zapisywany jest w storze. Gdy ktoś stworzy tylko obiekt User klasą User to zajmuje to niepotrzebnie pamięć a chcąc potem wykorzystać takiego usera nie da się, bo nie występuje w storze.
 // TODO czy można używać kodów błędów ze standardu HTTP? Raczej swoje własne?
 
@@ -16,7 +16,7 @@ export class UserStore implements IUserStore {
     return (UserStore.instance = new UserStore());
   }
 
-  public addUser({ pesel, firstName, lastName }: UserProps): User | void {
+  public addUser({ pesel, firstName, lastName }: UserParams): User | void {
     // VALIDATORS WILL BE ADD HERE TO VALIDATE pesel, firstName, lastName !
     if (this.getUserByPesel(pesel))
       throw new UserStoreError(

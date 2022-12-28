@@ -1,25 +1,25 @@
-import { Booking } from '../Booking/Booking';
-import { Library } from '../Library/Library';
-import { UserStore } from '../Users/UserStore/UserStore';
-import { LibraryItem } from '../Library/LibraryItemType';
-import { User } from '../Users/User';
-import { Book } from 'Book/Book';
-import { BookingSystemError } from './BookingSystemError';
+import { Booking } from './Booking.class';
+import { Library } from '../Library/Library.class';
+import { UserStore } from '../Users/UserStore/UserStore.class';
+import { LibraryItem } from '../Library/LibraryItem.type';
+import { User } from '../Users/User.class';
+import { Book } from 'Book/Book.class';
+import { BookingServiceError } from './BookingService.exception';
 
-export class BookingSystem {
-  private static instance: BookingSystem;
+export class BookingService {
+  private static instance: BookingService;
   private static userStore: UserStore;
   private static library: Library;
   private static bookings: Map<number, Booking[]> = new Map();
 
   private constructor() {
-    BookingSystem.userStore = UserStore.getInstance();
-    BookingSystem.library = Library.getLibrary();
+    BookingService.userStore = UserStore.getInstance();
+    BookingService.library = Library.getLibrary();
   }
 
-  public static getBookingSystem() {
-    if (BookingSystem.instance) return BookingSystem.instance;
-    return (BookingSystem.instance = new BookingSystem());
+  public static getBookingService() {
+    if (BookingService.instance) return BookingService.instance;
+    return (BookingService.instance = new BookingService());
   }
 
   private validateIfExist(
@@ -27,12 +27,12 @@ export class BookingSystem {
     libraryItem: LibraryItem | undefined
   ): void {
     if (!user)
-      throw new BookingSystemError(
+      throw new BookingServiceError(
         'Passed user pesel not found! Cannon proceed.',
         500
       );
     if (!libraryItem)
-      throw new BookingSystemError(
+      throw new BookingServiceError(
         'Passed book uuid not found! Cannon proceed.',
         500
       );
@@ -43,18 +43,18 @@ export class BookingSystem {
     libraryItem: LibraryItem | undefined
   ): void {
     if (!user?.checkIfCanBook())
-      throw new BookingSystemError(
+      throw new BookingServiceError(
         'Passed user cannot book a book, is blocked! Cannon proceed.',
         500
       );
     if (libraryItem?.user)
-      throw new BookingSystemError(
+      throw new BookingServiceError(
         'Passed book uuid points on the alread booked book! Cannot proceed.',
         500
       );
     const possiblyCurrentPenalty = this.checkCurrentPenalty(user.pesel);
     if (possiblyCurrentPenalty >= 10)
-      throw new BookingSystemError(
+      throw new BookingServiceError(
         'User is holding books too long and cannot book another one! User should return all books and weit for reset petalty.',
         500
       );
@@ -66,12 +66,12 @@ export class BookingSystem {
     bookingsArr: Booking[] | undefined
   ): void {
     if (libraryItem?.user?.pesel !== user?.pesel)
-      throw new BookingSystemError(
+      throw new BookingServiceError(
         'Passed book is connected with other user! Cannot proceed the returnement by passed user.',
         500
       );
     if (!bookingsArr || !bookingsArr?.length)
-      throw new BookingSystemError(
+      throw new BookingServiceError(
         "Passed user doesn't have any book to return! Cannot proceed.",
         500
       );
@@ -81,7 +81,7 @@ export class BookingSystem {
           currentBooking.book.uuid === libraryItem?.book.uuid
       ) < 0
     )
-      throw new BookingSystemError(
+      throw new BookingServiceError(
         "Passed user doesn't have this book to return! Cannot proceed.",
         500
       );
@@ -97,19 +97,19 @@ export class BookingSystem {
     bookingDays: number;
   }): Booking | void {
     const user: User | undefined =
-      BookingSystem.userStore.getUserByPesel(userPesel);
+      BookingService.userStore.getUserByPesel(userPesel);
     const libraryItem: LibraryItem | undefined =
-      BookingSystem.library.getItemById(bookUuid);
+      BookingService.library.getItemById(bookUuid);
     this.validateIfExist(user, libraryItem);
 
     user?.refreshPenalty();
     this.validateToBook(user, libraryItem);
 
     const newBooking = new Booking(libraryItem?.book as Book, bookingDays);
-    BookingSystem.library.connectBookWhUser(bookUuid, user as User);
+    BookingService.library.connectBookWhUser(bookUuid, user as User);
     const bookingsArr: Booking[] | undefined =
-      BookingSystem.bookings.get(userPesel);
-    BookingSystem.bookings.set(
+      BookingService.bookings.get(userPesel);
+    BookingService.bookings.set(
       userPesel,
       bookingsArr ? [...bookingsArr, newBooking] : [newBooking]
     );
@@ -124,13 +124,13 @@ export class BookingSystem {
     userPesel: number;
   }): true | void {
     const user: User | undefined =
-      BookingSystem.userStore.getUserByPesel(userPesel);
+      BookingService.userStore.getUserByPesel(userPesel);
     const libraryItem: LibraryItem | undefined =
-      BookingSystem.library.getItemById(bookUuid);
+      BookingService.library.getItemById(bookUuid);
     this.validateIfExist(user, libraryItem);
 
     const bookingsArr: Booking[] | undefined =
-      BookingSystem.bookings.get(userPesel);
+      BookingService.bookings.get(userPesel);
 
     this.validateToReturn(user, libraryItem, bookingsArr);
 
@@ -141,9 +141,9 @@ export class BookingSystem {
     );
     user?.setPenalty(penalty);
 
-    BookingSystem.library.connectBookWhUser(bookUuid, null);
+    BookingService.library.connectBookWhUser(bookUuid, null);
     if (bookingsArr)
-      BookingSystem.bookings.set(
+      BookingService.bookings.set(
         userPesel,
         bookingsArr.filter(
           (currentBooking: Booking) => currentBooking.book.uuid !== bookUuid
@@ -154,7 +154,7 @@ export class BookingSystem {
 
   private checkCurrentPenalty(userPesel: number): number {
     const currentBookings: Booking[] | undefined =
-      BookingSystem.bookings.get(userPesel);
+      BookingService.bookings.get(userPesel);
     const now = Date.now();
     return (
       currentBookings?.reduce(
@@ -176,6 +176,6 @@ export class BookingSystem {
   }
 
   public getBookings() {
-    return new Map(BookingSystem.bookings);
+    return new Map(BookingService.bookings);
   }
 }

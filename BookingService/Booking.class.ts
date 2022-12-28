@@ -1,4 +1,4 @@
-import { Book } from '../Book/Book';
+import { Book } from '../Book/Book.class';
 import { v4 as uuidv4 } from 'uuid';
 
 export class Booking {

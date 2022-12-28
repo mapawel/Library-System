@@ -1,6 +1,6 @@
-import { Book } from '../Book/Book';
-import { LibraryItem } from './LibraryItemType';
-import { User } from '../Users/User';
+import { Book } from '../Book/Book.class';
+import { LibraryItem } from './LibraryItem.type';
+import { User } from '../Users/User.class';
 
 export interface ILibrary {
   addBook(book: Book): LibraryItem | void;
