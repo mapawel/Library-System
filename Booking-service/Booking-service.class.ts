@@ -2,6 +2,7 @@ import { Booking } from './Booking.class';
 import { Library } from '../Library/Library.class';
 import { UserStore } from '../Users/User-store/User-store.class';
 import { LibraryItem } from '../Library/LibraryItem.type';
+import { Penalty } from '../Penalty/Penalty.class';
 import { User } from '../Users/User.class';
 import { BookingServiceError } from './Booking-service.exception';
 import { millisToDays } from '../utils/millisToDays';
@@ -61,11 +62,15 @@ export class BookingService {
 
     this.validateToReturn(user, libraryItem, bookingsArr);
 
-    const penalty = this.calculateBookingPenalty(
-      bookingsArr?.find(
-        (bookingToFind: Booking) => bookingToFind.book.uuid === bookUuid
-      ) as Booking
-    );
+    let penalty: number = 0;
+    if (bookingsArr) {
+      penalty = Penalty.calculateBookingPenalty(
+        bookingsArr.find(
+          (bookingToFind: Booking) => bookingToFind.book.uuid === bookUuid
+        )
+      );
+    }
+
     user.setPenalty(penalty);
 
     this.library.connectBookWhUser(bookUuid, null);
@@ -100,8 +105,10 @@ export class BookingService {
           libraryItem,
         }
       );
-    const possiblyCurrentPenalty = this.checkCurrentPenalty(user.pesel);
-    if (possiblyCurrentPenalty >= 10)
+    const currentPenalty: number = this.bookings.get(user.pesel)
+      ? Penalty.checkCurrentPenalty(this.bookings.get(user.pesel))
+      : 0;
+    if (currentPenalty >= 10)
       throw new BookingServiceError(
         'User is holding books too long and cannot book another one! User should return all books and weit for reset petalty.',
         {
@@ -145,27 +152,5 @@ export class BookingService {
           libraryItem,
         }
       );
-  }
-
-  private checkCurrentPenalty(userPesel: number): number {
-    const currentBookings: Booking[] | undefined = this.bookings.get(userPesel);
-    const now = Date.now();
-    return (
-      currentBookings?.reduce(
-        (acc: number, booking: Booking) =>
-          acc +
-          (now - booking.endDate.getTime() > 0
-            ? Math.ceil(millisToDays(now - booking.endDate.getTime()))
-            : 0),
-        0
-      ) || 0
-    );
-  }
-
-  private calculateBookingPenalty(booking: Booking): number {
-    const now = Date.now();
-    return now - booking.endDate.getTime() > 0
-      ? Math.ceil(millisToDays(now - booking.endDate.getTime()))
-      : 0;
   }
 }
