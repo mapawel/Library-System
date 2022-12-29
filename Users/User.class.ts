@@ -19,7 +19,7 @@ export class User {
     return this.canBook;
   }
 
-  setPenalty(penalty: number) {
+  setPenalty(penalty: number): void {
     // VALIDATOR WILL BE ADD HERE
     this.penalty += penalty;
     if (this.penalty >= 10) {
@@ -28,7 +28,7 @@ export class User {
     }
   }
 
-  resetPenaltyIfPossible() {
+  resetPenaltyIfPossible(): void {
     if (
       this.panaltyResetTime?.getTime() &&
       Date.now() >= this.panaltyResetTime.getTime()

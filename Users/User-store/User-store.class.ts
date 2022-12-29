@@ -14,6 +14,10 @@ export class UserStore implements IUserStore {
     return (UserStore.instance = new UserStore());
   }
 
+  public static resetInstance(): void {
+    UserStore.instance = null;
+  }
+
   public addUser({ pesel, firstName, lastName }: UserParams): User {
     // VALIDATORS WILL BE ADD HERE TO VALIDATE pesel, firstName, lastName !
     if (this.users.get(pesel))
@@ -29,9 +33,12 @@ export class UserStore implements IUserStore {
   public getUserByPesel(pesel: number): User {
     const foundUser: User | undefined = this.users.get(pesel);
     if (!foundUser)
-      throw new UserStoreError('There is no user with this pesel in our base!', {
-        pesel,
-      });
+      throw new UserStoreError(
+        'There is no user with this pesel in our base!',
+        {
+          pesel,
+        }
+      );
     return foundUser;
   }
 }
