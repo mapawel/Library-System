@@ -3,7 +3,6 @@ import { Library } from '../Library/Library.class';
 import { UserStore } from '../Users/User-store/User-store.class';
 import { LibraryItem } from '../Library/LibraryItem.type';
 import { User } from '../Users/User.class';
-import { Book } from 'Book/Book.class';
 import { BookingServiceError } from './Booking-service.exception';
 import { millisToDays } from '../utils/millisToDays';
 
@@ -35,10 +34,10 @@ export class BookingService {
     const user: User = this.userStore.getUserByPesel(userPesel);
     const libraryItem: LibraryItem = this.library.getItemById(bookUuid);
 
-    user?.resetPenaltyIfPossible();
+    user.resetPenaltyIfPossible();
     this.validateToBook(user, libraryItem);
 
-    const newBooking = new Booking(libraryItem?.book, bookingDays);
+    const newBooking = new Booking(libraryItem.book, bookingDays);
     this.library.connectBookWhUser(bookUuid, user);
     const bookingsArr: Booking[] | undefined = this.bookings.get(userPesel);
     this.bookings.set(
@@ -54,7 +53,7 @@ export class BookingService {
   }: {
     bookUuid: string;
     userPesel: number;
-  }): true | void {
+  }): boolean {
     const user: User = this.userStore.getUserByPesel(userPesel);
     const libraryItem: LibraryItem = this.library.getItemById(bookUuid);
 
@@ -67,7 +66,7 @@ export class BookingService {
         (bookingToFind: Booking) => bookingToFind.book.uuid === bookUuid
       ) as Booking
     );
-    user?.setPenalty(penalty);
+    user.setPenalty(penalty);
 
     this.library.connectBookWhUser(bookUuid, null);
     if (bookingsArr)
@@ -80,41 +79,58 @@ export class BookingService {
     return true;
   }
 
-  public getBookings() {
+  public getBookings(): Map<number, Booking[]> {
     return new Map(this.bookings);
   }
 
-  private validateToBook(
-    user: User | undefined,
-    libraryItem: LibraryItem | undefined
-  ): void {
-    if (!user?.checkIfCanBook())
+  private validateToBook(user: User, libraryItem: LibraryItem): void {
+    if (!user.checkIfCanBook())
       throw new BookingServiceError(
-        'Passed user cannot book a book, is blocked! Cannon proceed.'
+        'Passed user cannot book a book, is blocked! Cannon proceed.',
+        {
+          user,
+          libraryItem,
+        }
       );
-    if (libraryItem?.user)
+    if (libraryItem.user)
       throw new BookingServiceError(
-        'Passed book uuid points on the alread booked book! Cannot proceed.'
+        'Passed book uuid points on the alread booked book! Cannot proceed.',
+        {
+          user,
+          libraryItem,
+        }
       );
     const possiblyCurrentPenalty = this.checkCurrentPenalty(user.pesel);
     if (possiblyCurrentPenalty >= 10)
       throw new BookingServiceError(
-        'User is holding books too long and cannot book another one! User should return all books and weit for reset petalty.'
+        'User is holding books too long and cannot book another one! User should return all books and weit for reset petalty.',
+        {
+          user,
+          libraryItem,
+        }
       );
   }
 
   private validateToReturn(
-    user: User | undefined,
-    libraryItem: LibraryItem | undefined,
+    user: User,
+    libraryItem: LibraryItem,
     bookingsArr: Booking[] | undefined
   ): void {
-    if (libraryItem?.user?.pesel !== user?.pesel)
+    if (libraryItem?.user?.pesel !== user.pesel)
       throw new BookingServiceError(
-        'Passed book is connected with other user! Cannot proceed the returnement by passed user.'
+        'Passed book is connected with other user! Cannot proceed the returnement by passed user.',
+        {
+          user,
+          libraryItem,
+        }
       );
     if (!bookingsArr || !bookingsArr?.length)
       throw new BookingServiceError(
-        "Passed user doesn't have any book to return! Cannot proceed."
+        "Passed user doesn't have any book to return! Cannot proceed.",
+        {
+          user,
+          libraryItem,
+        }
       );
     if (
       bookingsArr.findIndex(
@@ -123,7 +139,11 @@ export class BookingService {
       ) < 0
     )
       throw new BookingServiceError(
-        "Passed user doesn't have this book to return! Cannot proceed."
+        "Passed user doesn't have this book to return! Cannot proceed.",
+        {
+          user,
+          libraryItem,
+        }
       );
   }
 

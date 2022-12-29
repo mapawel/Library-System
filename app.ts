@@ -1,5 +1,5 @@
 import { Library } from './Library/Library.class.js';
-import { Book } from './Book/Book.class.js';
+import { Book } from './Library/Book/Book.class.js';
 import { UserStore } from './Users/User-store/User-store.class.js';
 import { User } from './Users/User.class.js';
 import { BookingService } from './Booking-service/Booking-service.class.js';

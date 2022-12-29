@@ -1,4 +1,4 @@
-import { Book } from '../Book/Book.class';
+import { Book } from '../Library/Book/Book.class';
 import { v4 as uuidv4 } from 'uuid';
 import { daysToMillis } from '../utils/daysToMillis';
 

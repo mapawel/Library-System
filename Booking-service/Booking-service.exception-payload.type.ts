@@ -1,5 +1,7 @@
+import { LibraryItem } from "../Library/LibraryItem.type";
+import { User } from "../Users/User.class";
+
 export type ExceptionPayload = {
-  pesel: number;
-  firstName?: string;
-  lastName?: string;
+  user: User;
+  libraryItem: LibraryItem
 };

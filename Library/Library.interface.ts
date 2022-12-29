@@ -1,4 +1,4 @@
-import { Book } from '../Book/Book.class';
+import { Book } from './Book/Book.class';
 import { LibraryItem } from './LibraryItem.type';
 import { User } from '../Users/User.class';
 

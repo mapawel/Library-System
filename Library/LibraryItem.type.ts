@@ -1,4 +1,4 @@
-import { Book } from 'Book/Book.class';
+import { Book } from 'Library/Book/Book.class';
 import { User } from '../Users/User.class';
 
 export type LibraryItem = {

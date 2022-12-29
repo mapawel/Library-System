@@ -1,4 +1,4 @@
-import { Book } from 'Book/Book.class';
+import { Book } from 'Library/Book/Book.class';
 import { ILibrary } from './Library.interface';
 import { LibraryItem } from './LibraryItem.type';
 import { User } from '../Users/User.class';
@@ -25,10 +25,7 @@ export class Library implements ILibrary {
     return { book, user: null };
   }
 
-  public connectBookWhUser(
-    bookUuid: string,
-    user: User | null
-  ): boolean {
+  public connectBookWhUser(bookUuid: string, user: User | null): boolean {
     const libraryItem: LibraryItem | undefined = this.books.get(bookUuid);
     if (!libraryItem)
       throw new LibraryError(
@@ -36,7 +33,7 @@ export class Library implements ILibrary {
         { uuid: bookUuid, user }
       );
     this.books.set(bookUuid, { ...libraryItem, user });
-    return true
+    return true;
   }
 
   public getItemById(uuid: string): LibraryItem {
