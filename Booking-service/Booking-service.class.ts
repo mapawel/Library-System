@@ -5,10 +5,9 @@ import { LibraryItem } from '../Library/LibraryItem.type';
 import { Penalty } from '../Penalty/Penalty.class';
 import { User } from '../Users/User.class';
 import { BookingServiceError } from './Booking-service.exception';
-import { millisToDays } from '../utils/millisToDays';
 
 export class BookingService {
-  private static instance: BookingService;
+  private static instance: BookingService | null;
   private readonly userStore: UserStore;
   private readonly library: Library;
   private readonly bookings: Map<number, Booking[]> = new Map();
@@ -21,6 +20,10 @@ export class BookingService {
   public static getInstance() {
     if (BookingService.instance) return BookingService.instance;
     return (BookingService.instance = new BookingService());
+  }
+
+  public static resetInstance() {
+    BookingService.instance = null;
   }
 
   public bookBook({

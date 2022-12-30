@@ -15,6 +15,10 @@ export class Library implements ILibrary {
     return (Library.instance = new Library());
   }
 
+  public static resetInstance(): void {
+    Library.instance = null;
+  }
+
   public addBook(book: Book): LibraryItem {
     if (this.books.get(book.uuid))
       throw new LibraryError(
@@ -43,19 +47,19 @@ export class Library implements ILibrary {
     return foundItem;
   }
 
-  public removeBookById(uuid: string): LibraryItem {
-    const bookToRm = this.getItemById(uuid);
-    if (!bookToRm)
+  public removeItemById(uuid: string): LibraryItem {
+    const itemToRm = this.books.get(uuid);
+    if (!itemToRm)
       throw new LibraryError(
         "Passed book uuid not found. Couldn't remove the book!",
         { uuid }
       );
-    if (bookToRm.user)
+    if (itemToRm.user)
       throw new LibraryError(
         'This book has already been booked. Removing possible after returnement.',
         { uuid }
       );
     this.books.delete(uuid);
-    return bookToRm;
+    return itemToRm;
   }
 }
