@@ -1,7 +1,7 @@
-import { User } from '../User.class';
+import { User } from '../User.class.js';
 import { IUserStore } from './User-store.interface';
 import { UserParams } from '../User-params.type';
-import { UserStoreError } from './User-store.exception';
+import { UserStoreError } from './User-store.exception.js';
 
 export class UserStore implements IUserStore {
   private static instance: UserStore | null = null;

@@ -48,7 +48,7 @@ describe('Library tests suite:', () => {
   });
 
   describe('removeItemById() tests:', () => {
-    it('should remove library item with specyfic uuid and throws error on try of getting removed item', () => {
+    it('should remove library item with specyfic uuid and  error on try of getting removed item', () => {
       const libraryItem: LibraryItem = library.addBook(bookMock);
       assert.deepEqual(libraryItem, library.getItemById(libraryItem.book.uuid));
       library.removeItemById(libraryItem.book.uuid);
@@ -57,13 +57,13 @@ describe('Library tests suite:', () => {
       }, 'Passed book uuid not found.');
     });
 
-    it('should throws error on try to remove non existing item', () => {
+    it('should throw error on try to remove non existing item', () => {
       assert.throws(() => {
         library.removeItemById('nonExistingId');
       }, "Passed book uuid not found. Couldn't remove the book!");
     });
 
-    it('should throws error on try to remove which is booked', () => {
+    it('should throw error on try to remove which is booked', () => {
       const libraryItem: LibraryItem = library.addBook(bookMock);
       const user: User = new User(userMock);
       assert.deepEqual(libraryItem, library.getItemById(libraryItem.book.uuid));
@@ -85,7 +85,7 @@ describe('Library tests suite:', () => {
       assert.deepEqual(libraryItem.user, user);
     });
 
-    it('should throws error on try to connect non existing library item with user', () => {
+    it('should throw error on try to connect non existing library item with user', () => {
       const user: User = new User(userMock);
       assert.throws(() => {
         library.connectBookWhUser('nonExistingId', user);

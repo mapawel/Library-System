@@ -37,33 +37,33 @@ const user1pesel = ru1?.pesel;
 const system = BookingService.getInstance();
 
 // SOME TEST OPERATIONS ON BOOKINGS
-system.bookBook({
-  bookUuid: book1uuid as string,
-  userPesel: user1pesel as number,
-  bookingDays: 6,
-});
+// system.bookBook({
+//   bookUuid: book1uuid as string,
+//   userPesel: user1pesel as number,
+//   bookingDays: 6,
+// });
 
-system.bookBook({
-  bookUuid: book2uuid as string,
-  userPesel: user1pesel as number,
-  bookingDays: 5,
-});
+// system.bookBook({
+//   bookUuid: book2uuid as string,
+//   userPesel: user1pesel as number,
+//   bookingDays: 5,
+// });
+
+// system.returnBook({
+//   bookUuid: book1uuid as string,
+//   userPesel: user1pesel as number,
+// });
 
 system.returnBook({
-  bookUuid: book1uuid as string,
-  userPesel: user1pesel as number,
-});
-
-system.returnBook({
   bookUuid: book2uuid as string,
   userPesel: user1pesel as number,
 });
 
-system.bookBook({
-  bookUuid: book2uuid as string,
-  userPesel: user1pesel as number,
-  bookingDays: 5,
-});
+// system.bookBook({
+//   bookUuid: book2uuid as string,
+//   userPesel: user1pesel as number,
+//   bookingDays: 5,
+// });
 
 console.log('ALL BOOKINGS IN SYSTEM ----> ', system.getBookings());
 console.log('USER WITH BOOKS ----> ', users.getUserByPesel(123));

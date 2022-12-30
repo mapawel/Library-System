@@ -12,7 +12,7 @@ describe('User-store tests suite:', () => {
   });
 
   describe('addUser() + getUserByPesel() tests:', () => {
-    it('should throws an error when not existing pesel passed to getUserByPesel()', () => {
+    it('should throw an error when not existing pesel passed to getUserByPesel()', () => {
       assert.throws(() => {
         userStore.getUserByPesel(11111111111);
       }, 'There is no user with this pesel in our base!');

@@ -1,10 +1,10 @@
-import { Booking } from './Booking.class';
-import { Library } from '../Library/Library.class';
-import { UserStore } from '../Users/User-store/User-store.class';
+import { Booking } from './Booking.class.js';
+import { Library } from '../Library/Library.class.js';
+import { UserStore } from '../Users/User-store/User-store.class.js';
 import { LibraryItem } from '../Library/LibraryItem.type';
-import { Penalty } from '../Penalty/Penalty.class';
-import { User } from '../Users/User.class';
-import { BookingServiceError } from './Booking-service.exception';
+import { Penalty } from '../Penalty/Penalty.class.js';
+import { User } from '../Users/User.class.js';
+import { BookingServiceError } from './Booking-service.exception.js';
 
 export class BookingService {
   private static instance: BookingService | null;
@@ -63,7 +63,7 @@ export class BookingService {
 
     const bookingsArr: Booking[] | undefined = this.bookings.get(userPesel);
 
-    this.validateToReturn(user, libraryItem, bookingsArr);
+    this.validateToReturn(user, libraryItem);
 
     let penalty: number = 0;
     if (bookingsArr) {
@@ -102,12 +102,13 @@ export class BookingService {
       );
     if (libraryItem.user)
       throw new BookingServiceError(
-        'Passed book uuid points on the alread booked book! Cannot proceed.',
+        'Passed book uuid points on the already booked book! Cannot proceed.',
         {
           user,
           libraryItem,
         }
       );
+
     const currentPenalty: number = this.bookings.get(user.pesel)
       ? Penalty.checkCurrentPenalty(this.bookings.get(user.pesel))
       : 0;
@@ -121,39 +122,15 @@ export class BookingService {
       );
   }
 
-  private validateToReturn(
-    user: User,
-    libraryItem: LibraryItem,
-    bookingsArr: Booking[] | undefined
-  ): void {
-    if (libraryItem?.user?.pesel !== user.pesel)
+  private validateToReturn(user: User, libraryItem: LibraryItem): void {
+    if (libraryItem?.user?.pesel !== user.pesel) {
       throw new BookingServiceError(
-        'Passed book is connected with other user! Cannot proceed the returnement by passed user.',
+        'Passed book is not connected with this user. Cannon proceed.',
         {
           user,
           libraryItem,
         }
       );
-    if (!bookingsArr || !bookingsArr?.length)
-      throw new BookingServiceError(
-        "Passed user doesn't have any book to return! Cannot proceed.",
-        {
-          user,
-          libraryItem,
-        }
-      );
-    if (
-      bookingsArr.findIndex(
-        (currentBooking: Booking) =>
-          currentBooking.book.uuid === libraryItem?.book.uuid
-      ) < 0
-    )
-      throw new BookingServiceError(
-        "Passed user doesn't have this book to return! Cannot proceed.",
-        {
-          user,
-          libraryItem,
-        }
-      );
+    }
   }
 }

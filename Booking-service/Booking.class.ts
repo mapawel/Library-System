@@ -1,9 +1,9 @@
-import { Book } from '../Library/Book/Book.class';
+import { Book } from '../Library/Book/Book.class.js';
 import { v4 as uuidv4 } from 'uuid';
-import { daysToMillis } from '../utils/daysToMillis';
+import { daysToMillis } from '../utils/daysToMillis.js';
 
 export class Booking {
-  readonly uuid: string;
+  uuid: string;
   readonly book: Book;
   readonly endDate: Date;
 

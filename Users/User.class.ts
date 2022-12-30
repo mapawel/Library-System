@@ -1,5 +1,5 @@
 import { UserParams } from './User-params.type';
-import { daysToMillis } from '../utils/daysToMillis';
+import { daysToMillis } from '../utils/daysToMillis.js';
 
 export class User {
   readonly pesel: number;
@@ -15,7 +15,7 @@ export class User {
     this.lastName = lastName;
   }
 
-  checkIfCanBook(): boolean {
+  public checkIfCanBook(): boolean {
     return this.canBook;
   }
 
@@ -28,7 +28,7 @@ export class User {
     }
   }
 
-  resetPenaltyIfPossible(): void {
+  public resetPenaltyIfPossible(): void {
     if (
       this.panaltyResetTime?.getTime() &&
       Date.now() >= this.panaltyResetTime.getTime()
@@ -37,5 +37,9 @@ export class User {
       this.penalty = 0;
       this.panaltyResetTime = null;
     }
+  }
+
+  public checkUserCurrentPenalty(user: User): number {
+    return this.penalty;
   }
 }

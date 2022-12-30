@@ -2,7 +2,7 @@ import { Book } from 'Library/Book/Book.class';
 import { ILibrary } from './Library.interface';
 import { LibraryItem } from './LibraryItem.type';
 import { User } from '../Users/User.class';
-import { LibraryError } from './Library.exception';
+import { LibraryError } from './Library.exception.js';
 
 export class Library implements ILibrary {
   private static instance: Library | null = null;
