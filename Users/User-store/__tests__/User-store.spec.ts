@@ -1,5 +1,5 @@
 import { assert } from 'chai';
-import { UserStore } from '../User-store.class';
+import { UserStore } from '../User-store';
 import { userMock } from './user.mock';
 
 describe('User-store tests suite:', () => {

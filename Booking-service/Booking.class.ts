@@ -1,4 +1,4 @@
-import { Book } from '../Library/Book/Book.class.js';
+import { Book } from '../Books/Book/Book.class.js';
 import { v4 as uuidv4 } from 'uuid';
 import { daysToMillis } from '../utils/daysToMillis.js';
 

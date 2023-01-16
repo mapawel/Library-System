@@ -1,5 +1,5 @@
-import { User } from '../User.class';
-import { UserParams } from '../User-params.type';
+import { User } from '../User/User.class';
+import { UserParams } from '../User/User-params.type';
 
 export interface IUserStore {
   addUser({ pesel, firstName, lastName }: UserParams): User;

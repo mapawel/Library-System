@@ -1,7 +1,7 @@
-import { User } from '../Users/User.class.js';
+import { User } from '../Users/User/User.class.js';
 import { Booking } from '../Booking-service/Booking.class.js';
 import { millisToDays } from '../utils/millisToDays.js';
-import { UserStore } from '../Users/User-store/User-store.class.js';
+import { UserStore } from '../Users/User-store/User-store.js';
 
 export class Penalty {
   public static checkCurrentPenalty(

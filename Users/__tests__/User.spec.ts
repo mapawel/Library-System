@@ -1,5 +1,5 @@
 import { assert } from 'chai';
-import { User } from '../User.class';
+import { User } from '../User/User.class';
 import { userMock } from './user.mock';
 import { set, reset } from 'mockdate';
 import { daysToMillis } from '../../utils/daysToMillis';

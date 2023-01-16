@@ -1,28 +1,28 @@
 import { assert } from 'chai';
-import { Library } from '../Library.class';
-import { User } from '../../Users/User.class';
+import { BookStore } from '../Book-store/Book-store';
+import { User } from '../../Users/User/User.class';
 import { bookMock } from './book.mock';
-import type { LibraryItem } from '../LibraryItem.type';
+import type { BookStoreItem } from '../Book-store/BookStoreItem.type';
 import { userMock } from './user.mock';
 
-describe('Library tests suite:', () => {
-  let library: Library;
+describe('BookStore tests suite:', () => {
+  let library: BookStore;
   beforeEach(() => {
-    library = Library.getInstance();
+    library = BookStore.getInstance();
   });
   afterEach(() => {
-    Library.resetInstance();
+    BookStore.resetInstance();
   });
 
   describe('addBook() tests:', () => {
     it('should add a book to field book in library item object', () => {
-      const libraryItem: LibraryItem = library.addBook(bookMock);
-      assert.deepEqual(libraryItem.book, bookMock);
+      const bookStoreItem: BookStoreItem = library.addBook(bookMock);
+      assert.deepEqual(bookStoreItem.book, bookMock);
     });
 
     it('should create field user with value of null for new added book', () => {
-      const libraryItem: LibraryItem = library.addBook(bookMock);
-      assert.isNull(libraryItem.user);
+      const bookStoreItem: BookStoreItem = library.addBook(bookMock);
+      assert.isNull(bookStoreItem.user);
     });
 
     it('should throw error while adding a book with the same uuid', () => {
@@ -35,9 +35,9 @@ describe('Library tests suite:', () => {
 
   describe('getItemById() tests:', () => {
     it('should return a library item by uuid', () => {
-      const libraryItem: LibraryItem = library.addBook(bookMock);
-      const foundLibraryItem = library.getItemById(libraryItem.book.uuid);
-      assert.deepEqual(libraryItem, foundLibraryItem);
+      const bookStoreItem: BookStoreItem = library.addBook(bookMock);
+      const foundLibraryItem = library.getItemById(bookStoreItem.book.uuid);
+      assert.deepEqual(bookStoreItem, foundLibraryItem);
     });
 
     it('should throw error while getting by unexisting uuid', () => {
@@ -49,11 +49,11 @@ describe('Library tests suite:', () => {
 
   describe('removeItemById() tests:', () => {
     it('should remove library item with specyfic uuid and  error on try of getting removed item', () => {
-      const libraryItem: LibraryItem = library.addBook(bookMock);
-      assert.deepEqual(libraryItem, library.getItemById(libraryItem.book.uuid));
-      library.removeItemById(libraryItem.book.uuid);
+      const bookStoreItem: BookStoreItem = library.addBook(bookMock);
+      assert.deepEqual(bookStoreItem, library.getItemById(bookStoreItem.book.uuid));
+      library.removeItemById(bookStoreItem.book.uuid);
       assert.throws(() => {
-        library.getItemById(libraryItem.book.uuid);
+        library.getItemById(bookStoreItem.book.uuid);
       }, 'Passed book uuid not found.');
     });
 
@@ -64,32 +64,32 @@ describe('Library tests suite:', () => {
     });
 
     it('should throw error on try to remove which is booked', () => {
-      const libraryItem: LibraryItem = library.addBook(bookMock);
+      const bookStoreItem: BookStoreItem = library.addBook(bookMock);
       const user: User = new User(userMock);
-      assert.deepEqual(libraryItem, library.getItemById(libraryItem.book.uuid));
-      library.connectBookWhUser(libraryItem.book.uuid, user);
+      assert.deepEqual(bookStoreItem, library.getItemById(bookStoreItem.book.uuid));
+      library.connectOrDisconnectBook(bookStoreItem.book.uuid, user);
       assert.throws(() => {
-        library.removeItemById(libraryItem.book.uuid);
+        library.removeItemById(bookStoreItem.book.uuid);
       }, 'This book has already been booked. Removing possible after returnement.');
     });
   });
 
-  describe('connectBookWhUser() tests:', () => {
+  describe('connectOrDisconnectBook() tests:', () => {
     it('should connect specyfic user to user field of library item', () => {
-      const addedLibraryItem: LibraryItem = library.addBook(bookMock);
+      const addedLibraryItem: BookStoreItem = library.addBook(bookMock);
       const user: User = new User(userMock);
-      library.connectBookWhUser(addedLibraryItem.book.uuid, user);
-      const libraryItem: LibraryItem = library.getItemById(
+      library.connectOrDisconnectBook(addedLibraryItem.book.uuid, user);
+      const bookStoreItem: BookStoreItem = library.getItemById(
         addedLibraryItem.book.uuid
       );
-      assert.deepEqual(libraryItem.user, user);
+      assert.deepEqual(bookStoreItem.user, user);
     });
 
     it('should throw error on try to connect non existing library item with user', () => {
       const user: User = new User(userMock);
       assert.throws(() => {
-        library.connectBookWhUser('nonExistingId', user);
-      }, "Library item not found! Cannon connect the user to the book.");
+        library.connectOrDisconnectBook('nonExistingId', user);
+      }, 'BookStore item not found! Cannon connect the user to the book.');
     });
   });
 });

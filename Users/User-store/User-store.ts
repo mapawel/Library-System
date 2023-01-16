@@ -1,6 +1,6 @@
-import { User } from '../User.class.js';
+import { User } from '../User/User.class.js';
 import { IUserStore } from './User-store.interface';
-import { UserParams } from '../User-params.type';
+import { UserParams } from '../User/User-params.type';
 import { UserStoreError } from './User-store.exception.js';
 
 export class UserStore implements IUserStore {

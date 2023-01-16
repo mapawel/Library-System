@@ -1,7 +1,7 @@
-import { LibraryItem } from "../Library/LibraryItem.type";
-import { User } from "../Users/User.class";
+import { BookStoreItem } from '../Books/Book-store/BookStoreItem.type';
+import { User } from '../Users/User/User.class';
 
 export type ExceptionPayload = {
   user: User;
-  libraryItem: LibraryItem
+  bookStoreItem: BookStoreItem;
 };
