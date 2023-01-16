@@ -1,4 +1,4 @@
-import { Book } from '../Book/Book.class';
+import { Book } from '../../Book/Book.class';
 
 export const bookMock: Book = new Book({
   title: 'Example Title',
