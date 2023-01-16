@@ -62,16 +62,14 @@ export class BookingService {
     const bookStoreItem: BookStoreItem = this.bookStore.getItemById(bookUuid);
 
     const bookingsArr: Booking[] | undefined = this.bookings.get(userPesel);
-
+    const foundBooking: Booking | undefined = bookingsArr?.find(
+      (bookingToFind: Booking) => bookingToFind.book.uuid === bookUuid
+    );
     this.validateToReturn(user, bookStoreItem);
 
     let penalty: number = 0;
-    if (bookingsArr) {
-      penalty = Penalty.calculateBookingPenalty(
-        bookingsArr.find(
-          (bookingToFind: Booking) => bookingToFind.book.uuid === bookUuid
-        )
-      );
+    if (bookingsArr && foundBooking) {
+      penalty = Penalty.calculateBookingPenalty(foundBooking);
     }
 
     user.setPenalty(penalty);
@@ -109,8 +107,12 @@ export class BookingService {
         }
       );
 
-    const currentPenalty: number = this.bookings.get(user.pesel)
-      ? Penalty.checkCurrentPenalty(this.bookings.get(user.pesel))
+    const currentUserBookings: Booking[] | undefined = this.bookings.get(
+      user.pesel
+    );
+
+    const currentPenalty: number = currentUserBookings
+      ? Penalty.checkCurrentPenalty(currentUserBookings)
       : 0;
     if (currentPenalty >= 10)
       throw new BookingServiceError(

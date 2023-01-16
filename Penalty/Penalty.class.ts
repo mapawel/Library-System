@@ -5,11 +5,11 @@ import { UserStore } from '../Users/User-store/User-store.js';
 
 export class Penalty {
   public static checkCurrentPenalty(
-    currentBookings: Booking[] | undefined
+    currentBookings: Booking[]
   ): number {
     const now = Date.now();
     return (
-      currentBookings?.reduce(
+      currentBookings.reduce(
         (acc: number, booking: Booking) =>
           acc +
           (now - booking.endDate.getTime() > 0
@@ -20,8 +20,7 @@ export class Penalty {
     );
   }
 
-  public static calculateBookingPenalty(booking: Booking | undefined): number {
-    if (!booking) return 0;
+  public static calculateBookingPenalty(booking: Booking): number {
     const now = Date.now();
     return now - booking.endDate.getTime() > 0
       ? Math.ceil(millisToDays(now - booking.endDate.getTime()))
