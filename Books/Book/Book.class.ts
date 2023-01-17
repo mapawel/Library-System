@@ -1,5 +1,5 @@
 import { v4 as uuidv4 } from 'uuid';
-import { BookParams } from './Book-params.type';
+import { BookParams } from '../Books.types';
 
 export class Book {
   readonly uuid: string;

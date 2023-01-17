@@ -1,10 +1,9 @@
 import { Book } from 'Books/Book/Book.class';
-import { IBookStore } from './Book-store.interface';
-import { BookStoreItem } from './BookStoreItem.type';
-import { User } from '../../Users/User/User.class'
-import { BookStoreError } from './Book-store.exception.js';
+import { BookStoreItem } from 'Books/Books.types';
+import { User } from '../../Users/User/User.class';
+import { BookStoreError } from './Book.store.exception.js';
 
-export class BookStore implements IBookStore {
+export class BookStore {
   private static instance: BookStore | null = null;
   private readonly books: Map<string, BookStoreItem> = new Map();
 

@@ -1,18 +1,18 @@
-import { BookStore } from '../Books/Book-store/Book-store';
-import { UserStore } from '../Users/User-store/User-store';
+import { BookStore } from '../Books/Book-store/Book.store';
+import { UserStore } from '../Users/User-store/User.store';
 import { Penalty } from '../Penalty/Penalty.class';
-import { BookingService } from '../Booking-service/Booking-service';
+import { BookingService } from 'Bookings/Booking-service/Booking.service';
 import { Book } from '../Books/Book/Book.class';
-import { BookStoreItem } from '../Books/Book-store/BookStoreItem.type';
+import { BookStoreItem } from 'Books/Books.types';
 import { User } from '../Users/User/User.class';
-import { UserParams } from '../Users/User/User-params.type';
-import { Booking } from '../Booking-service/Booking.class';
+import { UserParams } from '../Users/Users.types';
+import { Booking } from '../Bookings/Booking/Booking.class';
 
 export class Library {
   private static instance: Library | null = null;
-  private books: BookStore;
-  private users: UserStore;
-  private bookings: BookingService;
+  private readonly books: BookStore;
+  private readonly users: UserStore;
+  private readonly bookings: BookingService;
 
   private constructor() {
     this.books = BookStore.getInstance();

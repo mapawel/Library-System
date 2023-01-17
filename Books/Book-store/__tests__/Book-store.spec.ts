@@ -1,12 +1,11 @@
 import { assert } from 'chai';
-import { BookStore } from '../Book-store';
+import { BookStore } from '../Book.store';
 import { User } from '../../../Users/User/User.class';
 import { bookMock } from './book.mock';
-import type { BookStoreItem } from '../BookStoreItem.type';
+import { BookStoreItem } from 'Books/Books.types';
 import { userMock } from './user.mock';
 
 describe('BookStore tests suite:', () => {
-  //given
   let library: BookStore;
   beforeEach(() => {
     library = BookStore.getInstance();

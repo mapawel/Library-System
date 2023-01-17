@@ -1,12 +1,8 @@
-import { User } from '../Users/User/User.class.js';
-import { Booking } from '../Booking-service/Booking.class.js';
-import { millisToDays } from '../utils/millisToDays.js';
-import { UserStore } from '../Users/User-store/User-store.js';
+import { Booking } from '../Bookings/Booking/Booking.class.js';
+import { millisToDays } from '../timeTranslateFns.js';
 
 export class Penalty {
-  public static checkCurrentPenalty(
-    currentBookings: Booking[]
-  ): number {
+  public static checkCurrentPenalty(currentBookings: Booking[]): number {
     const now = Date.now();
     return (
       currentBookings.reduce(

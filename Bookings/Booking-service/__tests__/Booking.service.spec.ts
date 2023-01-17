@@ -1,14 +1,14 @@
 import { assert } from 'chai';
-import { BookStoreItem } from '../../Books/Book-store/BookStoreItem.type';
-import { User } from '../../Users/User/User.class';
-import { UserStore } from '../../Users/User-store/User-store';
-import { BookingService } from '../Booking-service';
-import { BookStore } from '../../Books/Book-store/Book-store';
+import type { BookStoreItem } from '../../../Books/Books.types';
+import { User } from '../../../Users/User/User.class';
+import { UserStore } from '../../../Users/User-store/User.store';
+import { BookingService } from '../Booking.service';
+import { BookStore } from '../../../Books/Book-store/Book.store';
 import { bookMock, book2Mock } from './book.mocks';
 import { userMock, user2Mock } from './user.mocks';
-import { Booking } from 'Booking-service/Booking.class';
+import { Booking } from '../../Booking/Booking.class';
 import { set, reset } from 'mockdate';
-import { daysToMillis } from '../../utils/daysToMillis';
+import { daysToMillis } from '../../../timeTranslateFns';
 
 describe('Booking-service tests suite:', () => {
   let bookingService: BookingService;

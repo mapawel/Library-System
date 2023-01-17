@@ -1,9 +1,8 @@
 import { User } from '../User/User.class.js';
-import { IUserStore } from './User-store.interface';
-import { UserParams } from '../User/User-params.type';
-import { UserStoreError } from './User-store.exception.js';
+import { UserParams } from '../Users.types';
+import { UserStoreError } from './User.store.exception.js';
 
-export class UserStore implements IUserStore {
+export class UserStore {
   private static instance: UserStore | null = null;
   private readonly users: Map<number, User> = new Map();
 

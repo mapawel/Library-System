@@ -1,5 +1,5 @@
-import { UserParams } from './User-params.type';
-import { daysToMillis } from '../../utils/daysToMillis.js';
+import { UserParams } from '../Users.types';
+import { daysToMillis } from '../../timeTranslateFns.js';
 
 export class User {
   readonly pesel: number;

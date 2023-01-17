@@ -1,4 +1,4 @@
-import { UserParams } from '../User-params.type';
+import { UserParams } from '../../Users.types';
 
 export const userMock: UserParams = {
   pesel: 12345678901,

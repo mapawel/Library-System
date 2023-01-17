@@ -1,20 +1,22 @@
-import { Booking } from './Booking.class.js';
-import { BookStore } from '../Books/Book-store/Book-store.js';
-import { UserStore } from '../Users/User-store/User-store.js';
-import { BookStoreItem } from '../Books/Book-store/BookStoreItem.type';
-import { Penalty } from '../Penalty/Penalty.class.js';
-import { User } from '../Users/User/User.class.js';
-import { BookingServiceError } from './Booking-service.exception.js';
+import { Booking } from '../../Bookings/Booking/Booking.class.js';
+import { BookStore } from '../../Books/Book-store/Book.store.js';
+import { UserStore } from '../../Users/User-store/User.store.js';
+import type { BookStoreItem } from '../../Books/Books.types';
+import { Penalty } from '../../Penalty/Penalty.class.js';
+import { User } from '../../Users/User/User.class.js';
+import { BookingServiceError } from './Booking.service.exception.js';
+import { BookingStore } from '../../Bookings/Booking-store/Booking.store.js';
 
 export class BookingService {
   private static instance: BookingService | null;
   private readonly userStore: UserStore;
   private readonly bookStore: BookStore;
-  private readonly bookings: Map<number, Booking[]> = new Map();
+  private readonly bookings: BookingStore;
 
   private constructor() {
     this.userStore = UserStore.getInstance();
     this.bookStore = BookStore.getInstance();
+    this.bookings = BookingStore.getInstance();
   }
 
   public static getInstance() {
@@ -24,6 +26,10 @@ export class BookingService {
 
   public static resetInstance() {
     BookingService.instance = null;
+  }
+
+  public getBookings(): Map<number, Booking[]> {
+    return this.bookings.getBookings();
   }
 
   public bookBook({
@@ -43,8 +49,10 @@ export class BookingService {
 
     const newBooking = new Booking(bookStoreItem.book, bookingDays);
     this.bookStore.connectOrDisconnectBook(bookUuid, user);
-    const bookingsArr: Booking[] | undefined = this.bookings.get(userPesel);
-    this.bookings.set(
+    const bookingsArr: Booking[] | undefined =
+      this.bookings.getBookingsByPesel(userPesel);
+
+    this.bookings.setBooking(
       userPesel,
       bookingsArr ? [...bookingsArr, newBooking] : [newBooking]
     );
@@ -61,7 +69,8 @@ export class BookingService {
     const user: User = this.userStore.getUserByPesel(userPesel);
     const bookStoreItem: BookStoreItem = this.bookStore.getItemById(bookUuid);
 
-    const bookingsArr: Booking[] | undefined = this.bookings.get(userPesel);
+    const bookingsArr: Booking[] | undefined =
+      this.bookings.getBookingsByPesel(userPesel);
     const foundBooking: Booking | undefined = bookingsArr?.find(
       (bookingToFind: Booking) => bookingToFind.book.uuid === bookUuid
     );
@@ -76,17 +85,13 @@ export class BookingService {
 
     this.bookStore.connectOrDisconnectBook(bookUuid, null);
     if (bookingsArr)
-      this.bookings.set(
+      this.bookings.setBooking(
         userPesel,
         bookingsArr.filter(
           (currentBooking: Booking) => currentBooking.book.uuid !== bookUuid
         )
       );
     return true;
-  }
-
-  public getBookings(): Map<number, Booking[]> {
-    return new Map(this.bookings);
   }
 
   private validateToBook(user: User, bookStoreItem: BookStoreItem): void {
@@ -107,9 +112,8 @@ export class BookingService {
         }
       );
 
-    const currentUserBookings: Booking[] | undefined = this.bookings.get(
-      user.pesel
-    );
+    const currentUserBookings: Booking[] | undefined =
+      this.bookings.getBookingsByPesel(user.pesel);
 
     const currentPenalty: number = currentUserBookings
       ? Penalty.checkCurrentPenalty(currentUserBookings)

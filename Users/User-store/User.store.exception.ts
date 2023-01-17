@@ -1,6 +1,6 @@
-import { ExceptionPayload } from './Book-store.exception-payload.type';
+import type { ExceptionPayload } from '../Users.types';
 
-export class BookStoreError extends Error {
+export class UserStoreError extends Error {
   constructor(
     readonly message: string,
     readonly userPayload?: ExceptionPayload

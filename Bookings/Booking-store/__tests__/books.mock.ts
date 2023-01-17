@@ -1,4 +1,4 @@
-import { Book } from '../../Books/Book/Book.class';
+import { Book } from '../../../Books/Book/Book.class';
 
 export const bookMock: Book = new Book({
   title: 'Example Title',
@@ -8,8 +8,8 @@ export const bookMock: Book = new Book({
 });
 
 export const book2Mock: Book = new Book({
-  title: 'Example Title 222',
-  author: 'Example Author 222',
+  title: 'Example Title2',
+  author: 'Example Author2',
   year: 1992,
-  publisher: 'Example Publisher 222',
+  publisher: 'Example Publisher2',
 });

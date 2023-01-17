@@ -2,7 +2,7 @@ import { assert } from 'chai';
 import { User } from '../User.class';
 import { userMock } from './user.mock';
 import { set, reset } from 'mockdate';
-import { daysToMillis } from '../../../utils/daysToMillis';
+import { daysToMillis } from '../../../timeTranslateFns';
 
 describe('User tests suite:', () => {
   //given
